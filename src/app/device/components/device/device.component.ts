@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DeviceService} from "../../services/device.service";
 import {map, tap} from "rxjs/operators";
 import {Observable} from "rxjs";
+import {DeviceDataModel} from "../../models/device.data.model";
 
 @Component({
   selector: 'app-device',
@@ -10,14 +11,18 @@ import {Observable} from "rxjs";
 })
 export class DeviceComponent implements OnInit {
 
-  deviceData!: Observable<any>;
+  deviceDataList!: Observable<DeviceDataModel[]>;
 
   constructor(private deviceService: DeviceService) { }
 
   ngOnInit(): void {
-    this.deviceData = this.deviceService.getAllDeviceData()
+    this.fetchAllDevicesData();
+  }
+
+  fetchAllDevicesData() {
+    this.deviceDataList = this.deviceService.getAllDeviceData()
       .pipe(
-        map(deviceData => deviceData)
+        map(deviceDataList => deviceDataList)
       );
   }
 

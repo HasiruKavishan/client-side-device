@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { ChartConfiguration, ChartOptions } from "chart.js";
 import {Observable} from "rxjs";
+import {DeviceDataModel} from "../../models/device.data.model";
+import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-plot-view',
@@ -10,10 +12,12 @@ import {Observable} from "rxjs";
 
 export class PlotViewComponent implements OnInit {
 
-  @Input('deviceData') set setDeviceData(deviceData: Observable<any>) {
-    if(deviceData) {
-
-    }
+  @Input('deviceDataList') set setDeviceData(deviceDataList: Observable<DeviceDataModel[]>) {
+    deviceDataList.pipe(
+      tap(res => {
+        console.log(res);
+      })
+    ).subscribe();
   }
   title = 'ng2-charts-demo';
 
