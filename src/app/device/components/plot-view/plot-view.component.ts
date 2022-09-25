@@ -3,6 +3,7 @@ import { ChartConfiguration, ChartOptions } from "chart.js";
 import {Observable} from "rxjs";
 import {DeviceDataModel} from "../../models/device.data.model";
 import {tap} from "rxjs/operators";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-plot-view',
@@ -12,42 +13,38 @@ import {tap} from "rxjs/operators";
 
 export class PlotViewComponent implements OnInit {
 
+  lineChartData!: ChartConfiguration<'line'>['data'];
+
   @Input('deviceDataList') set setDeviceData(deviceDataList: Observable<DeviceDataModel[]>) {
     deviceDataList.pipe(
-      tap(res => {
-        console.log(res);
+      tap((deviceList: DeviceDataModel[]) => {
+        const labels = deviceList.map((device: DeviceDataModel) => {
+          return this.datePipe.transform(device.createdDate, 'medium')
+        });
+
+        const firstDeviceReadings = deviceList.filter((device: DeviceDataModel) => device.deviceName === 'TMP_SEN_001')
+          .map((device: DeviceDataModel) => device.reading);
+
+        const secondDeviceReadings = deviceList.filter((device: DeviceDataModel) => device.deviceName === 'TMP_SEN_002')
+          .map((device: DeviceDataModel) => device.reading);
+
+        this.lineChartData = {
+          labels,
+          datasets: [
+            {data: firstDeviceReadings, label:'Series A', fill: true, tension:0.5, borderColor:'black', backgroundColor: 'rgba(255,0,0,0.3)'},
+            {data: secondDeviceReadings, label:'Series B', fill: true, tension:0.5, borderColor:'yellow', backgroundColor: 'rgba(250,0,0,0.2)'},
+          ]
+        };
       })
     ).subscribe();
   }
-  title = 'ng2-charts-demo';
 
-  public lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July'
-    ],
-    datasets: [
-      {
-        data: [ 65, 59, 80, 81, 56, 55, 40 ],
-        label: 'Series A',
-        fill: true,
-        tension: 0.5,
-        borderColor: 'black',
-        backgroundColor: 'rgba(255,0,0,0.3)'
-      }
-    ]
-  };
   public lineChartOptions: ChartOptions<'line'> = {
     responsive: false
   };
   public lineChartLegend = true;
 
-  constructor() {
+  constructor(private datePipe: DatePipe) {
   }
 
   ngOnInit() {

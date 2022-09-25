@@ -11,8 +11,8 @@ export class DeviceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllDeviceData(): Observable<DeviceDataModel[]> {
-    const url = API.device.getAllDeviceData;
+  getAllDevicesData(): Observable<DeviceDataModel[]> {
+    const url = API.device.fetchAllDevicesData;
     return this.httpClient.get<DeviceDataModel[]>(url);
   }
 

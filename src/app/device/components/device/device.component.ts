@@ -20,7 +20,7 @@ export class DeviceComponent implements OnInit {
   }
 
   fetchAllDevicesData() {
-    this.deviceDataList = this.deviceService.getAllDeviceData()
+    this.deviceDataList = this.deviceService.getAllDevicesData()
       .pipe(
         map(deviceDataList => deviceDataList)
       );
