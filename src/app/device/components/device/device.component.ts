@@ -3,6 +3,7 @@ import {DeviceService} from "../../services/device.service";
 import {map, tap} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {DeviceDataModel} from "../../models/device.data.model";
+import {DeviceDtoModel} from "../../models/device.dto.model";
 
 @Component({
   selector: 'app-device',
@@ -19,8 +20,8 @@ export class DeviceComponent implements OnInit {
     this.fetchAllDevicesData();
   }
 
-  fetchAllDevicesData() {
-    this.deviceDataList = this.deviceService.getAllDevicesData()
+  fetchAllDevicesData(deviceDtoModel?: DeviceDtoModel) {
+    this.deviceDataList = this.deviceService.getAllDevicesData(deviceDtoModel)
       .pipe(
         map(deviceDataList => deviceDataList)
       );
@@ -34,6 +35,10 @@ export class DeviceComponent implements OnInit {
         }
       })
     )
+  }
+
+  filterData(deviceDtoModel: DeviceDtoModel) {
+    this.fetchAllDevicesData(deviceDtoModel)
   }
 
 }
