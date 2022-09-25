@@ -9,6 +9,8 @@ import { FilterComponent } from './components/filter/filter.component';
 import {NgChartsModule} from "ng2-charts";
 import {DeviceService} from "./services/device.service";
 import {HttpClientModule} from "@angular/common/http";
+import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import {HttpClientModule} from "@angular/common/http";
     CommonModule,
     DeviceRoutingModule,
     NgChartsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [DeviceService, DatePipe]
 })

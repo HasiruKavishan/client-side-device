@@ -27,7 +27,7 @@ import {AppRoutingModule} from "./app-routing.module";
     MatButtonModule,
     MatSidenavModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
