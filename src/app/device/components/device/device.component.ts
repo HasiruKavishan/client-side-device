@@ -26,4 +26,14 @@ export class DeviceComponent implements OnInit {
       );
   }
 
+  removeDevice(deviceId: string) {
+    this.deviceService.deleteDeviceData(deviceId).pipe(
+      tap(res => {
+        if (res) {
+          console.log(res);
+        }
+      })
+    )
+  }
+
 }

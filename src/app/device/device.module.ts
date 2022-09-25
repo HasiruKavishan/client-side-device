@@ -11,6 +11,7 @@ import {DeviceService} from "./services/device.service";
 import {HttpClientModule} from "@angular/common/http";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatButtonModule} from "@angular/material/button";
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     NgChartsModule,
     HttpClientModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatButtonModule
   ],
   providers: [DeviceService, DatePipe]
 })

@@ -16,4 +16,9 @@ export class DeviceService {
     return this.httpClient.get<DeviceDataModel[]>(url);
   }
 
+  deleteDeviceData(deviceId: string): Observable<DeviceDataModel[]> {
+    const url = API.device.deleteDevice.format([deviceId]);
+    return this.httpClient.delete<DeviceDataModel[]>(url);
+  }
+
 }

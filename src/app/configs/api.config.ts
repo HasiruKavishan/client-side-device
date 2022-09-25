@@ -18,6 +18,7 @@ export const formatter = (apiString: string): { format: StringFormatter } => {
 };
 export const API = {
   device: {
-    fetchAllDevicesData: `${DEVICE}/get-all`
+    fetchAllDevicesData: `${DEVICE}/get-all`,
+    deleteDevice: formatter(`${DEVICE}/{0}`)
   }
 };

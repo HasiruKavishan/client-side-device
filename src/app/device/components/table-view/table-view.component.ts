@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, EventEmitter,Component, Input, Output, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {Observable, tap} from "rxjs";
@@ -11,9 +11,6 @@ import {DatePipe} from "@angular/common";
   styleUrls: ['./table-view.component.scss']
 })
 export class TableViewComponent implements AfterViewInit {
-
-  constructor(private datePipe: DatePipe) {}
-
 
   displayedColumns: string[] = ['deviceName', 'reading', 'deviceType', 'createdDate'];
   dataSource!: MatTableDataSource<DeviceDataModel>;
@@ -31,9 +28,16 @@ export class TableViewComponent implements AfterViewInit {
       }})
     ).subscribe();
   }
+  @Output() deleteDeviceEvent = new EventEmitter<string>();
+
+  constructor(private datePipe: DatePipe) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator!;
+  }
+
+  removeDevice(device: DeviceDataModel) {
+    this.deleteDeviceEvent.emit(device.id);
   }
 
 }
