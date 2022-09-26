@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DeviceService} from "../../services/device.service";
 import {map, tap} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {interval, Observable} from "rxjs";
 import {DeviceDataModel} from "../../models/device.data.model";
 import {DeviceDtoModel} from "../../models/device.dto.model";
 
@@ -13,8 +13,10 @@ import {DeviceDtoModel} from "../../models/device.dto.model";
 export class DeviceComponent implements OnInit {
 
   deviceDataList!: Observable<DeviceDataModel[]>;
+  liveMode: boolean = false;
 
-  constructor(private deviceService: DeviceService) { }
+  constructor(private deviceService: DeviceService) {
+  }
 
   ngOnInit(): void {
     this.fetchAllDevicesData();
@@ -23,7 +25,7 @@ export class DeviceComponent implements OnInit {
   fetchAllDevicesData(deviceDtoModel?: DeviceDtoModel) {
     this.deviceDataList = this.deviceService.getAllDevicesData(deviceDtoModel)
       .pipe(
-        map(deviceDataList => deviceDataList)
+        map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime()))
       );
   }
 
@@ -39,6 +41,28 @@ export class DeviceComponent implements OnInit {
 
   filterData(deviceDtoModel: DeviceDtoModel) {
     this.fetchAllDevicesData(deviceDtoModel)
+  }
+
+  enableLiveMode(liveMode: boolean) {
+    this.liveMode = liveMode;
+    this.deviceDataList = this.deviceDataList.pipe(
+      map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime())),
+      map((deviceList: DeviceDataModel[]) => deviceList.slice(0, 6))
+    );
+
+    interval(10000)
+      .pipe(
+        tap(() => {
+          if (this.liveMode) {
+            this.deviceDataList = this.deviceService.getAllDevicesData()
+              .pipe(
+                map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime())),
+                map((deviceList: DeviceDataModel[]) => deviceList.slice(0, 6))
+              );
+          }
+
+        })
+      ).subscribe();
   }
 
 }

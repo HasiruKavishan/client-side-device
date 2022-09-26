@@ -1,4 +1,4 @@
-import {Component,EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {debounceTime, tap} from "rxjs";
 import {DeviceDtoModel} from "../../models/device.dto.model";
@@ -11,10 +11,12 @@ import {DeviceDtoModel} from "../../models/device.dto.model";
 export class FilterComponent implements OnInit {
 
   @Output() searchEvent = new EventEmitter<DeviceDtoModel>();
+  @Output() liveModeEvent = new EventEmitter<boolean>();
 
   filterGroup!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -26,7 +28,8 @@ export class FilterComponent implements OnInit {
       deviceName: [''],
       deviceType: [''],
       startDate: [''],
-      endDate: ['']
+      endDate: [''],
+      enableLiveMode: false
     })
   }
 
@@ -35,7 +38,7 @@ export class FilterComponent implements OnInit {
       .pipe(
         debounceTime(1000),
         tap(formValue => {
-          if(formValue?.startDate && formValue.startDate != '' && formValue.endDate == '' ) {
+          if (formValue?.startDate && formValue.startDate != '' && formValue.endDate == '') {
             return;
           }
           const deviceDto: DeviceDtoModel = {
@@ -44,9 +47,17 @@ export class FilterComponent implements OnInit {
             startDate: formValue.startDate,
             endDate: formValue.endDate
           };
-          this.searchEvent.emit(deviceDto)
+
+          this.searchEvent.emit(deviceDto);
         })
       ).subscribe();
   }
 
+  clearForm(): void {
+    this.filterGroup.reset();
+  }
+
+  toggle() {
+    this.liveModeEvent.emit(!this.filterGroup.controls['enableLiveMode'].value);
+  }
 }

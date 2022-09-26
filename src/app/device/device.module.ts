@@ -19,6 +19,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    MatSlideToggleModule
   ],
   providers: [DeviceService, DatePipe]
 })

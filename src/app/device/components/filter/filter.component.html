@@ -23,6 +23,11 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="clearForm()">Clear</button>
+      <mat-slide-toggle color="primary" formControlName="enableLiveMode" (click)="toggle()">
+        Live Mode
+      </mat-slide-toggle>
     </div>
   </form>
 </mat-card>
