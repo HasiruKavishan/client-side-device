@@ -46,8 +46,7 @@ export class DeviceComponent implements OnInit {
   enableLiveMode(liveMode: boolean) {
     this.liveMode = liveMode;
     this.deviceDataList = this.deviceDataList.pipe(
-      map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime())),
-      map((deviceList: DeviceDataModel[]) => deviceList.slice(0, 6))
+      map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime()))
     );
 
     interval(10000)
@@ -56,8 +55,7 @@ export class DeviceComponent implements OnInit {
           if (this.liveMode) {
             this.deviceDataList = this.deviceService.getAllDevicesData()
               .pipe(
-                map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime())),
-                map((deviceList: DeviceDataModel[]) => deviceList.slice(0, 6))
+                map((deviceList: DeviceDataModel[]) => deviceList.slice(0, 1))
               );
           }
 
