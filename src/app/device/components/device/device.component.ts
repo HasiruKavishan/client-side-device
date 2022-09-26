@@ -49,12 +49,13 @@ export class DeviceComponent implements OnInit {
       map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime()))
     );
 
-    interval(10000)
+    interval(3000)
       .pipe(
         tap(() => {
           if (this.liveMode) {
             this.deviceDataList = this.deviceService.getAllDevicesData()
               .pipe(
+                map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime())),
                 map((deviceList: DeviceDataModel[]) => deviceList.slice(0, 1))
               );
           }

@@ -31,8 +31,8 @@ export class PlotViewComponent implements OnInit {
         this.lineChartData = {
           labels,
           datasets: [
-            {data: firstDeviceReadings, label:'Series A', fill: true, tension:0.5, borderColor:'rgb(75, 192, 192)', backgroundColor: 'rgba(255,0,0,0.3)'},
-            {data: secondDeviceReadings, label:'Series B', fill: true, tension:0.5, borderColor:'yellow', backgroundColor: 'rgba(250,0,0,0.2)'},
+            {data: firstDeviceReadings, label:'Series A', fill: true, tension:0.5, borderColor:'rgb(75, 192, 192)', backgroundColor: 'rgba(0,0,0,0.0)'},
+            {data: secondDeviceReadings, label:'Series B', fill: true, tension:0.5, borderColor:'yellow', backgroundColor: 'rgba(0,0,0,0.0)'},
           ]
         };
       })

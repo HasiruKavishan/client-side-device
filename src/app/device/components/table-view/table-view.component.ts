@@ -12,7 +12,7 @@ import {DatePipe} from "@angular/common";
 })
 export class TableViewComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['deviceName', 'reading', 'deviceType', 'createdDate'];
+  displayedColumns: string[] = ['deviceName', 'reading', 'createdDate'];
   dataSource!: MatTableDataSource<DeviceDataModel>;
 
   @ViewChild(MatPaginator) paginator:any = MatPaginator;
