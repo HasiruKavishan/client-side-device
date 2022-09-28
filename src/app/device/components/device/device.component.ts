@@ -1,17 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DeviceService} from "../../services/device.service";
-import {map, tap} from "rxjs/operators";
-import {interval, Observable} from "rxjs";
+import {map, tap, Subject, interval, Observable} from "rxjs";
 import {DeviceDataModel} from "../../models/device.data.model";
 import {DeviceDtoModel} from "../../models/device.dto.model";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-device',
   templateUrl: './device.component.html',
   styleUrls: ['./device.component.scss']
 })
-export class DeviceComponent implements OnInit {
+export class DeviceComponent implements OnInit, OnDestroy {
 
+  unsubscribe: Subject<void> = new Subject();
   deviceDataList!: Observable<DeviceDataModel[]>;
   liveMode: boolean = false;
 
@@ -25,6 +26,7 @@ export class DeviceComponent implements OnInit {
   fetchAllDevicesData(deviceDtoModel?: DeviceDtoModel) {
     this.deviceDataList = this.deviceService.getAllDevicesData(deviceDtoModel)
       .pipe(
+        takeUntil(this.unsubscribe),
         map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime()))
       );
   }
@@ -46,6 +48,7 @@ export class DeviceComponent implements OnInit {
   enableLiveMode(liveMode: boolean) {
     this.liveMode = liveMode;
     this.deviceDataList = this.deviceDataList.pipe(
+      takeUntil(this.unsubscribe),
       map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime()))
     );
 
@@ -55,6 +58,7 @@ export class DeviceComponent implements OnInit {
           if (this.liveMode) {
             this.deviceDataList = this.deviceService.getAllDevicesData()
               .pipe(
+                takeUntil(this.unsubscribe),
                 map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime())),
                 map((deviceList: DeviceDataModel[]) => deviceList.slice(0, 1))
               );
@@ -62,6 +66,11 @@ export class DeviceComponent implements OnInit {
 
         })
       ).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
 }
