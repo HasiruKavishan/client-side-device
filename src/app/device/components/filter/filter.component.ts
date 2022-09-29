@@ -2,6 +2,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {debounceTime, tap} from "rxjs";
 import {DeviceDtoModel} from "../../models/device.dto.model";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-filter',
@@ -58,6 +59,19 @@ export class FilterComponent implements OnInit {
   }
 
   toggle() {
-    this.liveModeEvent.emit(!this.filterGroup.controls['enableLiveMode'].value);
+    Swal.fire({
+      title: 'Are you sure want to perform this action',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, go ahead.',
+      cancelButtonText: 'No, let me think',
+    }).then((result) => {
+      const checked = this.filterGroup.controls['enableLiveMode'].value;
+      if (result.value) {
+        this.liveModeEvent.emit(checked);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.filterGroup.patchValue({enableLiveMode: !checked});
+      }
+    });
   }
 }
