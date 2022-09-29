@@ -60,7 +60,7 @@ export class FilterComponent implements OnInit {
 
   toggle() {
     Swal.fire({
-      title: 'Are you sure want to perform this action',
+      title: 'Are you sure want to perform this action ?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, go ahead.',

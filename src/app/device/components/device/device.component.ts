@@ -52,7 +52,7 @@ export class DeviceComponent implements OnInit, OnDestroy {
       map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime()))
     );
 
-    interval(3000)
+    const subscription = interval(3000)
       .pipe(
         tap(() => {
           if (this.liveMode) {
@@ -62,6 +62,8 @@ export class DeviceComponent implements OnInit, OnDestroy {
                 map((deviceList: DeviceDataModel[]) => deviceList.sort((pre, curr) => new Date(curr.createdDate).getTime() - new Date(pre.createdDate).getTime())),
                 map((deviceList: DeviceDataModel[]) => deviceList.slice(0, 1))
               );
+          } else {
+            subscription.unsubscribe();
           }
 
         })
