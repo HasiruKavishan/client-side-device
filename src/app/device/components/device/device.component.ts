@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DeviceService} from "../../services/device.service";
-import {map, tap, Subject, interval, Observable} from "rxjs";
+import {interval, map, Observable, Subject, tap} from "rxjs";
 import {DeviceDataModel} from "../../models/device.data.model";
 import {DeviceDtoModel} from "../../models/device.dto.model";
 import {takeUntil} from "rxjs/operators";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-device',
@@ -42,7 +43,25 @@ export class DeviceComponent implements OnInit, OnDestroy {
   }
 
   filterData(deviceDtoModel: DeviceDtoModel) {
-    this.fetchAllDevicesData(deviceDtoModel)
+    this.fetchAllDevicesData(deviceDtoModel);
+    this.deviceDataList.pipe(
+      takeUntil(this.unsubscribe),
+      tap((deviceList: DeviceDataModel[]) => {
+        if (!deviceList.length) {
+          Swal.fire({
+            title: 'Oops...',
+            text: 'No results found!',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.fetchAllDevicesData();
+            }
+          })
+        }
+      })
+    ).subscribe();
   }
 
   enableLiveMode(liveMode: boolean) {
